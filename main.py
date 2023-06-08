@@ -9,7 +9,7 @@ mp_pose = mp.solutions.pose
 cap = cv.VideoCapture(0)
 
 #setting up the mediapipe instance
-with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as pose:
+with mp_pose.Pose(min_detection_confidence=0.7, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
         ret, frame = cap.read()
 
@@ -22,6 +22,12 @@ with mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5) as 
         #Recoloring back to BGR
         image.flags.writeable = True
         image = cv.cvtColor(image, cv.COLOR_RGB2BGR)
+
+        try:
+            landmarks = results.pose_landmarks.landmark
+            print(landmarks)
+        except:
+            pass
 
         #Rendering detections onto the feed
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
