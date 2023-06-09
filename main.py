@@ -9,6 +9,10 @@ mp_pose = mp.solutions.pose
 # Video feed
 cap = cv.VideoCapture(0)
 
+#Bicel Curl Counter 
+counter = 0
+position = None
+
 #setting up the mediapipe instance
 with mp_pose.Pose(min_detection_confidence=0.7, min_tracking_confidence=0.5) as pose:
     while cap.isOpened():
@@ -44,8 +48,22 @@ with mp_pose.Pose(min_detection_confidence=0.7, min_tracking_confidence=0.5) as 
             cv.putText(image, str(angle1),tuple(np.multiply(right_elbow, [640,480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2, cv.LINE_AA)
             cv.putText(image, str(angle2),tuple(np.multiply(left_elbow, [640,480]).astype(int)), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0,255,0), 2, cv.LINE_AA)
 
+            if angle1 > 160 and angle2 > 160:
+                position = 'down'
+            if angle1 < 30 and angle2 < 30 and position == 'down':
+                position = 'up'
+                counter += 1
+
         except:
             pass
+        
+        cv.rectangle(image, (0,0), (225,73), (245,117,16), -1)
+        cv.putText(image, 'COUNT', (15,12), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv.LINE_AA)
+        cv.putText(image, str(counter), (10,60), cv.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 2, cv.LINE_AA)
+
+        cv.putText(image, 'Position', (300,12), cv.FONT_HERSHEY_SIMPLEX, 0.5, (0,0,0), 1, cv.LINE_AA)
+        cv.putText(image, position, (300,60), cv.FONT_HERSHEY_SIMPLEX, 2, (255,255,0), 2, cv.LINE_AA)
+
 
         #Rendering detections onto the feed
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
