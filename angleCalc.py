@@ -11,6 +11,6 @@ def angle(x, y, z):
     angle = np.abs(radians*180.0/np.pi)
 
     if angle > 180.0:
-        angle = 360-angle
+        angle = 360 - angle
 
     return angle

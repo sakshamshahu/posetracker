@@ -7,14 +7,15 @@ from angleCalc import angle
 cap = cv.VideoCapture(
     '/run/media/saksham/T7/pexels-ketut-subiyanto-4859747-3840x2160-25fps.mp4')
 
-fps = int(cap.get(cv.CAP_PROP_FPS))
-
-# can use CAP_PROP_FPS to get the fps of the video
-# can use CAP_FFMPEG to open and record video file or stream using ffmpeg library
-
 # x and y are the dimensions of the video
 x = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
 y = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
+
+# can use CAP_PROP_FPS to get the fps of the video
+fps = int(cap.get(cv.CAP_PROP_FPS))
+out = cv.VideoWriter('sampleoutput.avi', cv.VideoWriter_fourcc(*'XVID'), fps, (x, y), True)
+
+# can use CAP_FFMPEG to open and record video file or stream using ffmpeg library
 
 def rescaleFrame(frame, scale=0.4):
 
@@ -101,6 +102,8 @@ with mp_pose.Pose(min_detection_confidence=0.7, min_tracking_confidence=0.5) as 
             image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
     
         frame_resized = rescaleFrame(image)
+
+        out.write(image)
         cv.imshow('Squaat', frame_resized)
 
         if cv.waitKey(fps) & 0xFF == ord('x'):
