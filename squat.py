@@ -12,6 +12,9 @@ fps = int(cap.get(cv.CAP_PROP_FPS))
 # can use CAP_PROP_FPS to get the fps of the video
 # can use CAP_FFMPEG to open and record video file or stream using ffmpeg library
 
+# x and y are the dimensions of the video
+x = int(cap.get(cv.CAP_PROP_FRAME_WIDTH))
+y = int(cap.get(cv.CAP_PROP_FRAME_HEIGHT))
 
 def rescaleFrame(frame, scale=0.4):
 
@@ -66,10 +69,10 @@ with mp_pose.Pose(min_detection_confidence=0.7, min_tracking_confidence=0.5) as 
             print(angle_1, angle_2)
 
             # Drawing the angle onto the feed
-            cv.putText(image, str(angle_1), tuple(np.multiply(right_knee, [3840, 2160]).astype(
+            cv.putText(image, str(angle_1), tuple(np.multiply(right_knee, [x, y]).astype(
                 int)), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 59, 150), 3, cv.LINE_AA)
 
-            cv.putText(image, str(angle_2), tuple(np.multiply(left_knee, [3840, 2160]).astype(
+            cv.putText(image, str(angle_2), tuple(np.multiply(left_knee, [x, y]).astype(
                 int)), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 3, cv.LINE_AA)
 
         except:
